@@ -1,8 +1,10 @@
 import datetime as dt
 
+
 class Record:
     """ Принимает данные, переводит время в нужный формат, добавляет текущее время, если date не указан."""
     date_format = '%d.%m.%Y'
+
     def __init__(self, amount, comment, date=dt.date.today()):
         self.amount = amount
         self.comment = comment
@@ -23,24 +25,22 @@ class Calculator:
     def add_record(self, record):
         self.records.append(record)
 
+    def get_stats(self, amount_day):
+        result = 0
+        today = dt.date.today()
+        day_delta = today - dt.timedelta(days=amount_day)
+        for Record in self.records:
+            if day_delta < Record.date <= today:
+                result += Record.amount
+        return result
+
     # Статистика за сегодня.
     def get_today_stats(self):
-        result = 0
-        today = dt.date.today()
-        day_delta = today - dt.timedelta(days=1)
-        for Record in self.records:
-            if day_delta < Record.date and Record.date <= today:
-                result += Record.amount
-        return result
+        return self.get_stats(1)
+
     # Статистика за неделю.
     def get_week_stats(self):
-        result = 0
-        today = dt.date.today()
-        day_delta = today - dt.timedelta(days=7)
-        for Record in self.records:
-            if day_delta < Record.date and Record.date <= today:
-                result += Record.amount
-        return result
+        return self.get_stats(7)
 
 
 class CashCalculator(Calculator):
@@ -71,9 +71,10 @@ class CaloriesCalculator(Calculator):
         spent = self.get_today_stats()
         remained = self.limit - spent
         if remained > 0:
-            return (f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не б.get_caолее {remained} кКал')
+            return f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {remained} кКал'
         else:
-            return (f'Хватит есть!')
+            return f'Хватит есть!'
+
 
 if __name__ == "__main__":
     cash_calculator = CashCalculator(1000)
