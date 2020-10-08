@@ -2,7 +2,7 @@ import datetime as dt
 
 
 class Record:
-    """ Принимает данные, переводит время в нужный формат, добавляет текущее время, если date не указан."""
+    """ Переводит время в нужный формат, добавляет текущее время, если date не указан."""
     date_format = '%d.%m.%Y'
 
     def __init__(self, amount, comment, date=dt.date.today()):
@@ -15,16 +15,17 @@ class Record:
 
 
 class Calculator:
-    """Принемает дневной лимит. Заполняет список self.record данными из класса Record. рассчитывает """
+    """Принемает дневной лимит. Заполняет список self.record данными из класса Record. рассчитывает."""
 
     def __init__(self, limit):
         self.limit = limit
         self.records = []
 
-    # Создает таблицу.
+    # Заполняет таблицу.
     def add_record(self, record):
         self.records.append(record)
 
+    # Рассчет статистики
     def get_stats(self, amount_day):
         result = 0
         today = dt.date.today()
